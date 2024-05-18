@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.core.database import engine, SessionLocal
+from app.core.dependencies import db_dependency
 
 from app.core.config import settings
 
@@ -21,3 +23,8 @@ def get_application():
 
 
 app = get_application()
+
+
+@app.post("/")
+async def check_db(db: db_dependency):
+    return {"Yes": "Db is working fine"}

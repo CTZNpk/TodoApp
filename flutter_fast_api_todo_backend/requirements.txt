@@ -3,3 +3,5 @@ uvicorn==0.29.0
 pydantic
 pydantic-settings
 pytest
+sqlalchemy
+psycopg2
