@@ -5,3 +5,5 @@ pydantic-settings
 pytest
 sqlalchemy
 psycopg2
+"python-jose[cryptography]"
+"passlib[bcrypt]"

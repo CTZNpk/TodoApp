@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     PROJECT_NAME: str
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
     POSTGRESS_DB_URL: str
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(
