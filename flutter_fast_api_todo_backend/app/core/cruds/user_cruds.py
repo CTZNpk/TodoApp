@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 pwd_context = CryptContext(schemes=["bcrypt"], depricated="auto")
 
 
-def get_hash_password(password: str):
+def __get_hash_password(password: str):
     return pwd_context.hash(password)
 
 
@@ -21,7 +21,7 @@ def get_user_by_id(db: Session, id: int):
 
 
 def create_user(db: Session, user: user_schema.UserCreate):
-    hashed_password = get_hash_password(user.password)
+    hashed_password = __get_hash_password(user.password)
     db_user = user_model.User(id=uuid.uuid4(),
                               email=user.email,
                               hashed_password=hashed_password)
