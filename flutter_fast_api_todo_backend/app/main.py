@@ -1,9 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.database import engine, SessionLocal
+from app.core.database import engine
 from app.core.dependencies import db_dependency
+from app.core.database import Base
+from app.core.router import auth_routes
 
 from app.core.config import settings
+
+Base.metadata.create_all(bind=engine)
 
 
 def get_application():
@@ -24,7 +28,6 @@ def get_application():
 
 app = get_application()
 
+app.include_router(auth_routes.router)
 
-@app.post("/")
-async def check_db(db: db_dependency):
-    return {"Yes": "Db is working fine"}
+
