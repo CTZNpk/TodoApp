@@ -11,11 +11,9 @@ from app.core.config import settings
 from jose import jwt
 from fastapi import APIRouter
 from fastapi import HTTPException, status
-from passlib.context import CryptContext
+import bcrypt
 
 router = APIRouter(tags=["auth"], )
-
-pwd_context = CryptContext(schemes=["bcrypt"])
 
 
 def generate_jwt_token(data: dict, expires_delta: timedelta | None = None):
@@ -55,7 +53,10 @@ async def signup_user(db: db_dependency, form_data: oauth2_form_dependency):
 
 
 def __verify_password(password, hashed_password):
-    if not pwd_context.verify(password, hashed_password):
+    password_bytes = password.encode("utf-8")
+    hash_pass_bytes = hashed_password.encode("utf-8")
+
+    if not bcrypt.checkpw(password_bytes, hash_pass_bytes):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Incorrect Password")
 

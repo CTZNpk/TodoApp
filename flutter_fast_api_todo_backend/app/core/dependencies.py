@@ -17,7 +17,7 @@ oauth2_form_dependency = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 
 def check_password_format(form: oauth2_form_dependency):
-    regex = r"^(?=.*[A-Z])(?=.*\d).+$"
+    regex = r"^(?=.*[A-Z])(?=.*\d).{6,}$"
     if not re.match(regex, form.password):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="Incorrect Password Format")

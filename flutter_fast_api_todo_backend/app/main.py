@@ -1,17 +1,15 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine
-from app.core.dependencies import db_dependency
 from app.core.database import Base
 from app.core.router import auth_routes
 
 from app.core.config import settings
 
-Base.metadata.create_all(bind=engine)
-
 
 def get_application():
-    _app = FastAPI(title=settings.PROJECT_NAME)
+    _app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
 
     _app.add_middleware(
         CORSMiddleware,
@@ -26,8 +24,17 @@ def get_application():
     return _app
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    Base.metadata.create_all(bind=engine)
+    yield
+
+
 app = get_application()
 
 app.include_router(auth_routes.router)
 
 
+@app.get("/")
+def default():
+    return "The Api is working"

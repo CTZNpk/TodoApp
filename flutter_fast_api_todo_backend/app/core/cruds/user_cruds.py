@@ -1,14 +1,13 @@
-import uuid
 from sqlalchemy.orm import Session
 from app.core.models import user_model
 from app.core.schemas import user_schema
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"])
+import bcrypt
 
 
 def __get_hash_password(password: str):
-    return pwd_context.hash(password)
+    bytes = password.encode("utf-8")
+    salt = bcrypt.gensalt(16)
+    return bcrypt.hashpw(bytes, salt=salt).decode("utf-8")
 
 
 def get_user_by_email(db: Session, email: str) -> user_model.User:
