@@ -11,8 +11,9 @@ class Todo(Base):
     user_id = Column(Integer, ForeignKey("user.id"))
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
-    isDone = Column(Boolean, default=False)
-    createdTime = Column(DateTime(timezone=True), server_default=func.now())
-    deadlineTime = Column(DateTime(timezone=True))
+    is_done = Column(Boolean, default=False)
+    is_daily = Column(Boolean, default=False)
+    created_time = Column(DateTime(timezone=True), server_default=func.now())
+    deadline_time = Column(DateTime(timezone=True))
 
     user = relationship("User", back_populates="todos")
