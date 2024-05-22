@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Boolean, Integer
+from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 
@@ -10,4 +11,4 @@ class User(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
 
-    # todos = relationship("Item", back_populates="owner")
+    todos = relationship("Todo", back_populates="user")
