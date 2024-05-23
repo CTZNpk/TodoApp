@@ -8,7 +8,7 @@ class Todo(Base):
     __tablename__ = "Todos"
 
     todo_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("user.id"))
+    user_email = Column(Integer, ForeignKey("user.email"))
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     is_done = Column(Boolean, default=False)

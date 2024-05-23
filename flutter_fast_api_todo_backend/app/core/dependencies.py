@@ -1,5 +1,8 @@
 import re
-from fastapi import Depends
+from datetime import datetime, timezone
+from app.core.config import settings
+from fastapi import Depends, Header
+from jose import jwt, JWTError
 from app.core.database import get_db
 from typing import Annotated
 from sqlalchemy.orm import Session
@@ -34,3 +37,40 @@ def check_email_format(form: oauth2_form_dependency):
 
 
 email_format_dependency = Depends(check_email_format)
+
+
+def verify_token(x_token: Annotated[str, Header]):
+    try:
+        scheme, token = x_token.split()
+
+        if scheme.lower() != "bearer":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Invalid authentication scheme. Must use bearer",
+            )
+
+        payload = jwt.decode(token,
+                             settings.JWT_SECRET_KEY,
+                             algorithms=[settings.JWT_ALGORITHM])
+        if payload["exp"] < datetime.now(timezone.utc).timestamp():
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token has expired",
+            )
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Invalid JWT Token")
+
+
+protected_path_dependency = Depends(verify_token)
+
+
+def get_email_from_token(x_token: Annotated[str, Header]):
+    scheme, token = x_token.split()
+    payload = jwt.decode(token,
+                         settings.JWT_SECRET_KEY,
+                         algorithms=[settings.JWT_ALGORITHM])
+    return payload["sub"]
+
+
+get_email_dependency = Annotated[str, Depends(get_email_from_token)]

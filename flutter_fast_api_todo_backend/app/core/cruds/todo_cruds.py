@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.core.models import todo_model
 from app.core.schemas import todo_schema
+from fastapi import HTTPException, status
 
 
 def createTodo(db: Session, todo: todo_schema.TodoCreate):
@@ -28,7 +29,7 @@ def get_todo_by_id(db: Session, todo_id: str):
 
 def update_todo(
     db: Session,
-    todo: todo_schema.TodoUpdate,
+    todo: todo_schema.Todo,
 ):
     db_item = (db.query(todo_model.Todo).filter(
         todo_model.Todo.todo_id == todo.todo_id).first())
@@ -48,6 +49,22 @@ def todo_done(db: Session, todo_id: str):
     db.commit()
     db.refresh(db_item)
     return db_item
+
+
+def check_todo_exist_and_is_owner(db: Session, todo_id: str, email: str):
+    todo_item = get_todo_by_id(db=db, todo_id=todo_id)
+    if not todo_item:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="The Todo does not exist",
+        )
+    todo = todo_schema.Todo.from_orm(todo_item)
+    if todo.user_email != email:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="This todo does not belong to you",
+        )
+    return todo
 
 
 def delete_todo(db: Session, todo_id: str):

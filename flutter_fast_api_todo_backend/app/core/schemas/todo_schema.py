@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict
 
 
 class TodoBase(BaseModel):
-    user_id: int
+    user_email: int
     description: str
     title: str
     is_daily: bool
@@ -20,7 +20,3 @@ class Todo(TodoBase):
     is_done: bool
 
     model_config = ConfigDict(from_attributes=True)
-
-
-class TodoUpdate(Todo):
-    pass
