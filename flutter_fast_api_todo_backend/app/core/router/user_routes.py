@@ -15,5 +15,5 @@ router = APIRouter(tags=["user"],
 @router.get("/")
 def get_current_user(db: db_dependency, email: get_email_dependency):
     db_user = user_cruds.get_user_by_email(db=db, email=email)
-    user = user_schema.User.from_orm(db_user)
+    user = user_schema.User.model_validate(db_user)
     return user

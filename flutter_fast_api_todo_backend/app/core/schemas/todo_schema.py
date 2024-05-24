@@ -14,6 +14,10 @@ class TodoCreate(TodoBase):
     pass
 
 
+class TodoUpdate(TodoBase):
+    is_done: bool
+
+
 class Todo(TodoBase):
     user_email: str
     todo_id: int

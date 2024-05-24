@@ -4,7 +4,7 @@ from app.core.dependencies import (
     get_current_active_user_dependency,
 )
 from app.core.schemas import todo_schema
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 
 router = APIRouter(
     tags=["todo"],
@@ -40,35 +40,35 @@ def get_todo_from_id(db: db_dependency,
 
 @router.patch("/{todo_id}/done")
 def set_todo_done(db: db_dependency, user: get_current_active_user_dependency,
-                  todo_id):
+                  todo_id: int):
     todo_cruds.check_todo_exist_and_is_owner(db=db,
                                              email=user.email,
                                              todo_id=todo_id)
     todo_item = todo_cruds.todo_done(db=db, todo_id=todo_id)
-    todo = todo_schema.Todo.from_orm(todo_item)
-    return {"detail": "Todo updated successfully", "todo": todo}
+    todo = todo_schema.Todo.model_validate(todo_item)
+    return {"detail": "Todo Updated Successfully", "todo": todo}
 
 
 @router.patch("/{todo_id}")
 def update_todo(
     db: db_dependency,
     user: get_current_active_user_dependency,
-    todo_id,
-    todo: todo_schema.Todo,
+    todo_id: int,
+    todo: todo_schema.TodoUpdate,
 ):
     todo_cruds.check_todo_exist_and_is_owner(db=db,
                                              email=user.email,
                                              todo_id=todo_id)
-    todo_item = todo_cruds.update_todo(db=db, todo=todo)
-    todo = todo_schema.Todo.from_orm(todo_item)
-    return {"detail": "Todo updated successfully", "todo": todo}
+    todo_item = todo_cruds.update_todo(db=db, todo=todo, todo_id=todo_id)
+    todo = todo_schema.Todo.model_validate(todo_item)
+    return {"detail": "Todo Updated Successfully", "todo": todo}
 
 
-@router.delete("/{todo_id}")
+@router.delete("/{todo_id}", status_code=204)
 def delete_todo(db: db_dependency, user: get_current_active_user_dependency,
                 todo_id):
     todo_cruds.check_todo_exist_and_is_owner(db=db,
                                              email=user.email,
                                              todo_id=todo_id)
     todo_cruds.delete_todo(db=db, todo_id=todo_id)
-    return {"detail": "Todo deleted successfully"}
+    return {"detail": "Todo Deleted Successfully"}

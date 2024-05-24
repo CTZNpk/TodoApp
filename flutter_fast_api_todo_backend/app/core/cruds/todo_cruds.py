@@ -23,19 +23,16 @@ def get_todos_by_user_id(db: Session, user_id: str):
     return db.query(todo_model.Todo).filter(todo_model.Todo.user_id == user_id)
 
 
-def get_todo_by_id(db: Session, todo_id: str):
+def get_todo_by_id(db: Session, todo_id: int):
     return db.query(
         todo_model.Todo).filter(todo_model.Todo.todo_id == todo_id).first()
 
 
-def update_todo(
-    db: Session,
-    todo: todo_schema.Todo,
-):
-    db_item = (db.query(todo_model.Todo).filter(
-        todo_model.Todo.todo_id == todo.todo_id).first())
+def update_todo(db: Session, todo: todo_schema.TodoUpdate, todo_id: int):
+    db_item = (db.query(
+        todo_model.Todo).filter(todo_model.Todo.todo_id == todo_id).first())
     if db_item:
-        for key, value in todo.dict().items():
+        for key, value in todo.model_dump().items():
             if hasattr(db_item, key):
                 setattr(db_item, key, value)
     db.commit()
@@ -52,14 +49,18 @@ def todo_done(db: Session, todo_id: str):
     return db_item
 
 
-def check_todo_exist_and_is_owner(db: Session, todo_id: str, email: str):
+def check_todo_exist_and_is_owner(db: Session, todo_id: int, email: str):
     todo_item = get_todo_by_id(db=db, todo_id=todo_id)
+    print(email)
+    print(todo_id)
+    print(todo_item)
     if not todo_item:
+        print("WE ARE HERHEHRHEH")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="The Todo does not exist",
         )
-    todo = todo_schema.Todo.from_orm(todo_item)
+    todo = todo_schema.Todo.model_validate(todo_item)
     print(todo.user_email)
     print(email)
     if todo.user_email != email:
