@@ -1,20 +1,43 @@
 import re
-from datetime import datetime, timezone
+from app.core.cruds import user_cruds
 from app.core.config import settings
-from fastapi import Depends, Header
+from fastapi import Depends
 from jose import jwt, JWTError
 from app.core.database import get_db
 from typing import Annotated
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from app.core.models.user_model import User
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
 oauth2_scheme_dependency = Annotated[
     str,
-    Depends(OAuth2PasswordBearer(tokenUrl="token"), ),
+    Depends(OAuth2PasswordBearer(tokenUrl="login")),
 ]
+
+
+async def __get_current_user(token: oauth2_scheme_dependency):
+    user = __verify_token_and_get_user(token)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return user
+
+
+async def __get_current_active_user(
+    current_user: Annotated[User, Depends(__get_current_user)], ):
+    if not current_user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
+
+
+get_current_active_user_dependency = Annotated[
+    User, Depends(__get_current_active_user)]
 
 oauth2_form_dependency = Annotated[OAuth2PasswordRequestForm, Depends()]
 
@@ -39,38 +62,25 @@ def check_email_format(form: oauth2_form_dependency):
 email_format_dependency = Depends(check_email_format)
 
 
-def verify_token(x_token: Annotated[str, Header]):
+def __verify_token_and_get_user(token: str):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
     try:
-        scheme, token = x_token.split()
-
-        if scheme.lower() != "bearer":
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Invalid authentication scheme. Must use bearer",
-            )
-
         payload = jwt.decode(token,
                              settings.JWT_SECRET_KEY,
                              algorithms=[settings.JWT_ALGORITHM])
-        if payload["exp"] < datetime.now(timezone.utc).timestamp():
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token has expired",
-            )
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+
     except JWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail="Invalid JWT Token")
+        raise credentials_exception
 
-
-protected_path_dependency = Depends(verify_token)
-
-
-def get_email_from_token(x_token: Annotated[str, Header]):
-    scheme, token = x_token.split()
-    payload = jwt.decode(token,
-                         settings.JWT_SECRET_KEY,
-                         algorithms=[settings.JWT_ALGORITHM])
-    return payload["sub"]
-
-
-get_email_dependency = Annotated[str, Depends(get_email_from_token)]
+    dataB = next(get_db())
+    user = user_cruds.get_user_by_email(db=dataB, email=username)
+    if user is None:
+        credentials_exception
+    return user

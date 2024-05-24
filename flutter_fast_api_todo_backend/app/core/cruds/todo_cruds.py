@@ -4,9 +4,10 @@ from app.core.schemas import todo_schema
 from fastapi import HTTPException, status
 
 
-def createTodo(db: Session, todo: todo_schema.TodoCreate):
+def createTodo(db: Session, todo: todo_schema.TodoCreate, email: str):
+    print("WE ARE HERHERHEHRHHERHERHHERHRHE BUT IT WONT PRINT")
     db_todo = todo_model.Todo(
-        user_id=todo.user_id,
+        user_email=email,
         title=todo.title,
         description=todo.description,
         is_daily=todo.is_daily,
@@ -45,7 +46,7 @@ def update_todo(
 def todo_done(db: Session, todo_id: str):
     db_item = (db.query(
         todo_model.Todo).filter(todo_model.Todo.todo_id == todo_id).first())
-    db["is_done"] = True
+    db_item.is_done = True
     db.commit()
     db.refresh(db_item)
     return db_item
@@ -59,6 +60,8 @@ def check_todo_exist_and_is_owner(db: Session, todo_id: str, email: str):
             detail="The Todo does not exist",
         )
     todo = todo_schema.Todo.from_orm(todo_item)
+    print(todo.user_email)
+    print(email)
     if todo.user_email != email:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

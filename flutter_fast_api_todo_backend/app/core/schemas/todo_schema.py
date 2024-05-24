@@ -1,13 +1,13 @@
-import datetime
+from datetime import datetime
 from pydantic import BaseModel, ConfigDict
+from typing import Optional
 
 
 class TodoBase(BaseModel):
-    user_email: int
     description: str
     title: str
     is_daily: bool
-    deadline_time: datetime | None
+    deadline_time: Optional[datetime] = None
 
 
 class TodoCreate(TodoBase):
@@ -15,6 +15,7 @@ class TodoCreate(TodoBase):
 
 
 class Todo(TodoBase):
+    user_email: str
     todo_id: int
     created_time: datetime
     is_done: bool

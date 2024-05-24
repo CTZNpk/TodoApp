@@ -5,10 +5,10 @@ from app.core.database import Base
 
 
 class Todo(Base):
-    __tablename__ = "Todos"
+    __tablename__ = "todos"
 
     todo_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_email = Column(Integer, ForeignKey("user.email"))
+    user_email = Column(String, ForeignKey("users.email"))
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     is_done = Column(Boolean, default=False)

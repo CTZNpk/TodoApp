@@ -73,7 +73,8 @@ async def login_user(db: db_dependency, form_data: oauth2_form_dependency):
         )
     __verify_password(form_data.password, db_user.hashed_password)
 
-    user = user_schema.User(email=db_user.email, id=db_user.id)
-
     access_token = generate_jwt_token(data={"sub": form_data.username})
-    return {"access-token": access_token, "token-type": "bearer", "user": user}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }
