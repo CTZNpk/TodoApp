@@ -18,8 +18,11 @@ oauth2_scheme_dependency = Annotated[
 ]
 
 
-async def __get_current_user(token: oauth2_scheme_dependency):
-    user = __verify_token_and_get_user(token)
+async def __get_current_user(
+        token: oauth2_scheme_dependency,
+        db: Session = Depends(get_db),
+):
+    user = __verify_token_and_get_user(db=db, token=token)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -62,7 +65,7 @@ def check_email_format(form: oauth2_form_dependency):
 email_format_dependency = Depends(check_email_format)
 
 
-def __verify_token_and_get_user(token: str):
+def __verify_token_and_get_user(token: str, db: Session):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -79,8 +82,7 @@ def __verify_token_and_get_user(token: str):
     except JWTError:
         raise credentials_exception
 
-    dataB = next(get_db())
-    user = user_cruds.get_user_by_email(db=dataB, email=username)
+    user = user_cruds.get_user_by_email(db=db, email=username)
     if user is None:
         credentials_exception
     return user

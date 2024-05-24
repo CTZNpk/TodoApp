@@ -19,7 +19,7 @@ def create_todo(
     user: get_current_active_user_dependency,
 ):
     db_item = todo_cruds.createTodo(db=db, todo=todo, email=user.email)
-    todoResponse = todo_schema.Todo.from_orm(db_item)
+    todoResponse = todo_schema.Todo.model_validate(db_item)
     return {"detail": "Todo Created Successfully", "todo": todoResponse}
 
 
