@@ -1,7 +1,5 @@
 from .test_api import client
 
-access_token = None
-
 
 def test_login_and_create_todo():
     response = client.post("/signup",
