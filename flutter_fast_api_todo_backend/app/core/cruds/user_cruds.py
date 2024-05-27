@@ -27,3 +27,16 @@ def create_user(db: Session, user: user_schema.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def update_user(db: Session, user: user_schema.User):
+    db_item = db.query(
+        user_model.User).filter(user_model.User.id == user.id).first()
+    if db_item:
+        print(user)
+        for key, value in user.model_dump().items():
+            if hasattr(db_item, key):
+                setattr(db_item, key, value)
+    db.commit()
+    db.refresh(db_item)
+    return db_item

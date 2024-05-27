@@ -4,7 +4,7 @@ from app.core.dependencies import (
     get_current_active_user_dependency,
 )
 from app.core.schemas import todo_schema
-from fastapi import APIRouter, status
+from fastapi import APIRouter
 
 router = APIRouter(
     tags=["todo"],

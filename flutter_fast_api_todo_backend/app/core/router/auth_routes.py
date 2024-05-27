@@ -16,7 +16,7 @@ import bcrypt
 router = APIRouter(tags=["auth"], )
 
 
-def generate_jwt_token(data: dict, expires_delta: timedelta | None = None):
+def __generate_jwt_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -27,10 +27,10 @@ def generate_jwt_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-def get_token_and_user(email, id):
-    user = user_schema.User(email=email, id=id)
+def __get_token_and_user(email, id):
+    user = user_schema.User(email=email, id=id, is_active=True)
 
-    access_token = generate_jwt_token(data={"sub": email})
+    access_token = __generate_jwt_token(data={"sub": email})
     return {"access-token": access_token, "token-type": "bearer", "user": user}
 
 
@@ -49,7 +49,7 @@ async def signup_user(db: db_dependency, form_data: oauth2_form_dependency):
         user_schema.UserCreate(email=form_data.username,
                                password=form_data.password),
     )
-    return get_token_and_user(form_data.username, db_user.id)
+    return __get_token_and_user(form_data.username, db_user.id)
 
 
 def __verify_password(password, hashed_password):
@@ -73,7 +73,7 @@ async def login_user(db: db_dependency, form_data: oauth2_form_dependency):
         )
     __verify_password(form_data.password, db_user.hashed_password)
 
-    access_token = generate_jwt_token(data={"sub": form_data.username})
+    access_token = __generate_jwt_token(data={"sub": form_data.username})
     return {
         "access_token": access_token,
         "token_type": "bearer",
