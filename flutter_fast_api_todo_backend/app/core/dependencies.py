@@ -33,7 +33,7 @@ async def __get_current_user(
 
 
 async def __get_current_active_user(
-    current_user: Annotated[User, Depends(__get_current_user)], ):
+        current_user: Annotated[User, Depends(__get_current_user)], ):
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
