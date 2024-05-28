@@ -10,6 +10,7 @@ class AppTheme {
   static ThemeData lightTheme() {
     return ThemeData(
       primaryColor: primaryColor,
+      scaffoldBackgroundColor: backgroundColor,
       appBarTheme: AppBarTheme(
         titleTextStyle: GoogleFonts.getFont(
           'Poppins',
@@ -22,6 +23,12 @@ class AppTheme {
         ),
         iconTheme: IconThemeData(color: primaryColor),
         backgroundColor: backgroundColor,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll<Color>(primaryColor),
+          foregroundColor: WidgetStatePropertyAll<Color>(backgroundColor),
+        ),
       ),
     );
   }
