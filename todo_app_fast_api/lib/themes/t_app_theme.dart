@@ -28,6 +28,20 @@ class AppTheme {
         style: ButtonStyle(
           backgroundColor: WidgetStatePropertyAll<Color>(primaryColor),
           foregroundColor: WidgetStatePropertyAll<Color>(backgroundColor),
+          textStyle: const WidgetStatePropertyAll<TextStyle>(
+            TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          shape: const WidgetStatePropertyAll<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  14,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app_fast_api/core/features/auth/screens/signup_screen.dart';
+import 'package:todo_app_fast_api/core/features/onboarding/onboarding_screen.dart';
 import 'package:todo_app_fast_api/core/features/onboarding/splash_screen.dart';
 import 'package:todo_app_fast_api/themes/t_app_theme.dart';
 
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Todo App',
       theme: AppTheme.lightTheme(),
-      home: const SplashScreen(),
+      home: const SignupScreen(),
     );
   }
 }

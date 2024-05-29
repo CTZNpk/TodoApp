@@ -31,24 +31,12 @@ class OnboardingScreen extends StatelessWidget {
             child: ElevatedButton(
               style: ButtonStyle(
                 fixedSize: WidgetStatePropertyAll<Size>(
-                  Size(size.width * 0.9, 60),
-                ),
-                shape: const WidgetStatePropertyAll<OutlinedBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        14,
-                      ),
-                    ),
-                  ),
+                  Size(size.width * 0.9, 50),
                 ),
               ),
               onPressed: () {},
               child: const Text(
                 'Get Started',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
               ),
             ),
           ),
