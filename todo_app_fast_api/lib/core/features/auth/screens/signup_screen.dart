@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:todo_app_fast_api/core/features/auth/screens/widgets/my_text_form_field.dart';
 import 'package:todo_app_fast_api/themes/t_app_theme.dart';
 
 class SignupScreen extends HookConsumerWidget {
@@ -14,6 +13,7 @@ class SignupScreen extends HookConsumerWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -28,9 +28,14 @@ class SignupScreen extends HookConsumerWidget {
           ),
           MyTextFormField(
             controller: emailController,
+            label: "Enter Email ...",
+            prefixIcon: const Icon(Icons.email),
           ),
           MyTextFormField(
             controller: passwordController,
+            label: "Enter Password ...",
+            prefixIcon: const Icon(Icons.password),
+            obscureText: true,
           ),
           const SizedBox(
             height: 8,
@@ -67,7 +72,7 @@ class SignupScreen extends HookConsumerWidget {
               ),
             ),
             child: const Text(
-              'Sign Up',
+              'SignUp',
             ),
           )
         ],
@@ -75,32 +80,3 @@ class SignupScreen extends HookConsumerWidget {
     );
   }
 }
-
-class MyTextFormField extends StatelessWidget {
-  const MyTextFormField({
-    super.key,
-    required this.controller,
-  });
-
-  final TextEditingController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: TextFormField(
-        controller: controller,
-        decoration: const InputDecoration(
-          filled: true,
-          label: Text('Enter Email ...'),
-          prefixIcon: Icon(Icons.email),
-          labelStyle: TextStyle(
-            color: Colors.grey,
-          ),
-          prefixIconColor: Colors.grey,
-        ),
-      ),
-    );
-  }
-}
-
