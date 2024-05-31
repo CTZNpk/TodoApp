@@ -10,21 +10,17 @@ class SignupScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final emailController = useTextEditingController();
     final passwordController = useTextEditingController();
+    final confirmPasswordController = useTextEditingController();
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+      body: ListView(
         children: [
           SizedBox(
-            height: size.height * 0.15,
-          ),
-          Image.asset(
-            'assets/images/tick.png',
-          ),
-          const SizedBox(
-            height: 50,
+            height: size.height * 0.5,
+            child: Image.asset(
+              'assets/images/tick.png',
+            ),
           ),
           MyTextFormField(
             controller: emailController,
@@ -37,42 +33,54 @@ class SignupScreen extends HookConsumerWidget {
             prefixIcon: const Icon(Icons.password),
             obscureText: true,
           ),
+          MyTextFormField(
+            controller: confirmPasswordController,
+            label: "Enter Confirm Password ...",
+            prefixIcon: const Icon(Icons.password),
+            obscureText: true,
+          ),
           const SizedBox(
             height: 8,
           ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  color: AppTheme.primaryColor,
-                  fontSize: 16,
-                ),
-                children: const [
-                  TextSpan(text: 'Already have an account? '),
-                  TextSpan(
-                    text: 'Login Here',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    color: AppTheme.primaryColor,
+                    fontSize: 16,
                   ),
-                ],
+                  children: const [
+                    TextSpan(text: 'Already have an account? '),
+                    TextSpan(
+                      text: 'Login Here',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            style: ButtonStyle(
-              fixedSize: WidgetStatePropertyAll<Size>(
-                Size(size.width * 0.9, 50),
-              ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 12.0,
+              right: 12.0,
+              bottom: 12.0,
             ),
-            child: const Text(
-              'SignUp',
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ButtonStyle(
+                fixedSize: WidgetStatePropertyAll<Size>(
+                  Size(size.width * 0.9, 50),
+                ),
+              ),
+              child: const Text(
+                'LogIn',
+              ),
             ),
           )
         ],
