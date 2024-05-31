@@ -4,6 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_app_fast_api/core/features/auth/screens/widgets/my_text_form_field.dart';
 
 class AddTodoScreen extends HookConsumerWidget {
+  static const routeName = '/add_todo_screen';
+
   const AddTodoScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,10 +1,13 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:todo_app_fast_api/core/features/auth/screens/signup_screen.dart';
 import 'package:todo_app_fast_api/core/features/auth/screens/widgets/my_text_form_field.dart';
 import 'package:todo_app_fast_api/themes/t_app_theme.dart';
 
 class LoginScreen extends HookConsumerWidget {
+  static const routeName = '/login_screen';
   const LoginScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,11 +16,19 @@ class LoginScreen extends HookConsumerWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: const Text(
+          'Login Screen',
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: ListView(
         children: [
           SizedBox(
-            height: size.height * 0.5,
+            height: size.height * 0.4,
             child: Image.asset(
               'assets/images/tick.png',
             ),
@@ -45,11 +56,16 @@ class LoginScreen extends HookConsumerWidget {
                     color: AppTheme.primaryColor,
                     fontSize: 16,
                   ),
-                  children: const [
-                    TextSpan(text: 'New to todo list app? '),
+                  children: [
+                    const TextSpan(text: 'New to todo list app? '),
                     TextSpan(
                       text: 'Signup Here',
-                      style: TextStyle(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.pushReplacementNamed(
+                              context, SignupScreen.routeName);
+                        },
+                      style: const TextStyle(
                         color: Colors.blue,
                         decoration: TextDecoration.underline,
                       ),

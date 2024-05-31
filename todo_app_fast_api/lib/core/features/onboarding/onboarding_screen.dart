@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app_fast_api/core/features/auth/screens/login_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
+  static const routeName = '/onboarding_screen';
   const OnboardingScreen({super.key});
 
   @override
@@ -34,7 +36,10 @@ class OnboardingScreen extends StatelessWidget {
                   Size(size.width * 0.9, 50),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () => Navigator.pushReplacementNamed(
+                context,
+                LoginScreen.routeName,
+              ),
               child: const Text(
                 'Get Started',
               ),

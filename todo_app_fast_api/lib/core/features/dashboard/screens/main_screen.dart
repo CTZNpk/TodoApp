@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app_fast_api/themes/t_app_theme.dart';
 
 class MainPage extends HookConsumerWidget {
+  static const routeName = '/main_page';
   const MainPage({super.key});
 
   @override
@@ -54,7 +54,7 @@ class MainPage extends HookConsumerWidget {
                       'Disable Account',
                       style: TextStyle(fontSize: 16),
                     ),
-                    Icon(Icons.delete_sharp),
+                    Icon(Icons.disabled_visible),
                   ],
                 ),
               ),
