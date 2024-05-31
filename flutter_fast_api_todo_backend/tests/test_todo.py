@@ -32,7 +32,6 @@ def test_login_and_create_todo():
     assert (json_response["todo"]["description"] ==
             "This is a new todo and i will do it daily")
     assert json_response["todo"]["is_daily"] is True
-    assert json_response["todo"]["deadline_time"] is None
     assert "created_time" in json_response["todo"]
     assert json_response["todo"]["is_done"] is False
     assert json_response["todo"]["user_email"] == "create_todo@gmail.com"
@@ -52,7 +51,6 @@ def test_get_user_todo():
     assert (json_response[0]["description"] ==
             "This is a new todo and i will do it daily")
     assert json_response[0]["is_daily"] is True
-    assert json_response[0]["deadline_time"] is None
     assert "created_time" in json_response[0]
     assert json_response[0]["is_done"] is False
     assert json_response[0]["user_email"] == "create_todo@gmail.com"

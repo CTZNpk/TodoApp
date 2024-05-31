@@ -5,13 +5,11 @@ from fastapi import HTTPException, status
 
 
 def createTodo(db: Session, todo: todo_schema.TodoCreate, email: str):
-    print("WE ARE HERHERHEHRHHERHERHHERHRHE BUT IT WONT PRINT")
     db_todo = todo_model.Todo(
         user_email=email,
         title=todo.title,
         description=todo.description,
         is_daily=todo.is_daily,
-        deadline_time=todo.deadline_time,
     )
     db.add(db_todo)
     db.commit()

@@ -14,6 +14,5 @@ class Todo(Base):
     is_done = Column(Boolean, default=False)
     is_daily = Column(Boolean, default=False)
     created_time = Column(DateTime(timezone=True), server_default=func.now())
-    deadline_time = Column(DateTime(timezone=True))
 
     user = relationship("User", back_populates="todos")
