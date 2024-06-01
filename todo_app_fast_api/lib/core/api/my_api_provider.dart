@@ -26,8 +26,14 @@ class MyApi {
     _dio.post('login', data: formData);
   }
 
+  Future signup(String email, String password) async {
+    FormData formData =
+        FormData.fromMap({'username': email, 'password': password});
+    _dio.post('signup', data: formData);
+  }
+
   Future<List<Todo>> getUserTodos() async {
-    Response response = await _dio.get('token');
+    Response response = await _dio.get('todo');
     return (jsonDecode(response.data) as List)
         .cast<Map<String, Object?>>()
         .map(Todo.fromJson)
@@ -35,6 +41,18 @@ class MyApi {
   }
 
   Future createUserTodo(Todo todo) async {
-    await _dio.post('token', data: todo.toJson());
+    await _dio.post('todo', data: todo.toJson());
+  }
+
+  Future checkTodo(String todoId) async {
+    await _dio.post('/$todoId/done');
+  }
+
+  Future deleteTodo(String todoId) async {
+    await _dio.delete('/$todoId');
+  }
+
+  Future updateTodo(Todo todo) async {
+    await _dio.patch('/${todo.id}', data: todo.toJson());
   }
 }

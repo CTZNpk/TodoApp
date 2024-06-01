@@ -16,4 +16,18 @@ class TodoList extends _$TodoList {
     ref.invalidateSelf();
     await future;
   }
+
+  Future<void> checkTodo(String todoId) async {
+    await ref.read(myApiProvider).checkTodo(todoId);
+    // ref.invalidateSelf();
+    // await future;
+  }
+
+  Future<void> deleteTodo(String todoId) async {
+    await ref.read(myApiProvider).deleteTodo(todoId);
+  }
+
+  Future<void> updateTodo(Todo todo) async {
+    await ref.read(myApiProvider).updateTodo(todo);
+  }
 }
