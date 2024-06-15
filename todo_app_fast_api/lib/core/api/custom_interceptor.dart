@@ -6,7 +6,7 @@ class CustomInterceptors extends Interceptor {
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     final dataStorage = await SharedPreferences.getInstance();
-    String? token = dataStorage.getString('token');
+    String? token = dataStorage.getString('access-token');
     options.headers['Authorization'] = 'Bearer $token';
     options.headers['Content-Type'] = 'application/json';
     handler.next(options);
@@ -14,9 +14,9 @@ class CustomInterceptors extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
-    if (response.data['access_token']) {
+    if (response.data['access-token'] != null) {
       final dataStorage = await SharedPreferences.getInstance();
-      dataStorage.setString('access_token', response.data['access_token']);
+      dataStorage.setString('access-token', response.data['access-token']);
     }
     super.onResponse(response, handler);
   }

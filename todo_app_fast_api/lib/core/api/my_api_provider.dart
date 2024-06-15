@@ -10,7 +10,7 @@ final myApiProvider = Provider((ref) => MyApi());
 class MyApi {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://10.0.2.2:5000/',
+      baseUrl: 'http://10.0.2.2:8000/',
       responseType: ResponseType.json,
       contentType: 'application/json',
     ),
