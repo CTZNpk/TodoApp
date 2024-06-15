@@ -20,9 +20,4 @@ class CustomInterceptors extends Interceptor {
     }
     super.onResponse(response, handler);
   }
-
-  @override
-  Future onError(DioException err, ErrorInterceptorHandler handler) async {
-    super.onError(err, handler);
-  }
 }

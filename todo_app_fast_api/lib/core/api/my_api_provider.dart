@@ -21,15 +21,23 @@ class MyApi {
   }
 
   Future login(String email, String password) async {
-    FormData formData =
-        FormData.fromMap({'username': email, 'password': password});
-    _dio.post('login', data: formData);
+    try {
+      FormData formData =
+          FormData.fromMap({'username': email, 'password': password});
+      await _dio.post('login', data: formData);
+    } on DioException catch (e) {
+      throw e.response!.data['detail'];
+    }
   }
 
   Future signup(String email, String password) async {
-    FormData formData =
-        FormData.fromMap({'username': email, 'password': password});
-    _dio.post('signup', data: formData);
+    try {
+      FormData formData =
+          FormData.fromMap({'username': email, 'password': password});
+      await _dio.post('signup', data: formData);
+    } on DioException catch (e) {
+      throw e.response!.data['detail'];
+    }
   }
 
   Future<List<Todo>> getUserTodos() async {
