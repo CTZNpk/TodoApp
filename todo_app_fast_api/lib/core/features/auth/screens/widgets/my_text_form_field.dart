@@ -6,6 +6,7 @@ class MyTextFormField extends StatelessWidget {
     required this.controller,
     required this.label,
     required this.prefixIcon,
+    required this.validator,
     this.obscureText = false,
   });
 
@@ -13,12 +14,14 @@ class MyTextFormField extends StatelessWidget {
   final String label;
   final Icon prefixIcon;
   final bool obscureText;
+  final Function validator;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: TextFormField(
+        validator: (text) => validator(text),
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
