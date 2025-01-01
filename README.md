@@ -98,15 +98,3 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 ├── README.md
 ```
 
----
-
-## Future Enhancements
-- Add support for user roles and permissions.
-- Implement soft delete for ToDo items.
-- Add WebSocket support for real-time updates.
-- Deploy the application to a cloud platform (AWS, Azure, GCP).
-
----
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
